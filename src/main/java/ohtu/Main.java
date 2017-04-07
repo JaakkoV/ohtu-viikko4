@@ -1,18 +1,14 @@
 package ohtu;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.http.client.fluent.Request;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         // vaihda oma opiskelijanumerosi seuraavaan, ÄLÄ kuitenkaan laita githubiin omaa opiskelijanumeroasi
-        String studentNr = "whoEvenCares";
+        String studentNr = "014579093";
         if (args.length > 0) {
             studentNr = args[0];
         }
@@ -26,7 +22,10 @@ public class Main {
         Gson mapper = new Gson();
         Submission[] subs = mapper.fromJson(bodyText, Submission[].class);
 
-        System.out.println("Kurssi: Ohjelmistotuotanto, kevät 2017");
+        Course course;
+        course = mapper.fromJson(Request.Get("https://ohtustats2017.herokuapp.com/courses/1.json").execute().returnContent().asString(), Course.class);
+
+        System.out.println(course.getName() + ", " + course.getTerm());
         System.out.println(String.format("opiskelijanumero: %s", subs[0].getStudent_number()));
         System.out.println("**************");
         int hoursTotal = 0;
